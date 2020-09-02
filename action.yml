@@ -16,7 +16,7 @@ runs:
           python3-dev \
           python3-setuptools
 
-        if [ -n "${{ inputs.version }}" ]; then
+        if [ -z "${{ inputs.version }}" ]; then
           sudo python3 -m pip install credstash
         else
           sudo python3 -m pip install credstash==${{ inputs.version }}
