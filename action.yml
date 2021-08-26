@@ -9,16 +9,30 @@ runs:
   steps:
     - name: install
       run: |
-        sudo apt-get install -y \
-          build-essential \
-          libssl-dev \
-          libffi-dev \
-          python3-dev \
-          python3-setuptools
+        if [ "$RUNNER_OS" == "Linux" ]; then
+          sudo apt-get install -y \
+            build-essential \
+            libssl-dev \
+            libffi-dev \
+            python3-dev \
+            python3-setuptools
 
-        if [ -z "${{ inputs.version }}" ]; then
-          sudo python3 -m pip install credstash
+          if [ -z "${{ inputs.version }}" ]; then
+            sudo python3 -m pip install credstash
+          else
+            sudo python3 -m pip install credstash==${{ inputs.version }}
+          fi
+          
+        elif [ "$RUNNER_OS" == "macOS" ]; then
+          /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+          if [ -z "${{ inputs.version }}" ]; then
+            brew install credstash
+          else
+            brew install credstash@${{ inputs.version }}
+          fi
+         
         else
-          sudo python3 -m pip install credstash==${{ inputs.version }}
+            echo "$RUNNER_OS not supported"
+            exit 1
         fi
       shell: bash
