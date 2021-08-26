@@ -22,9 +22,8 @@ runs:
           else
             sudo python3 -m pip install credstash==${{ inputs.version }}
           fi
-          
+
         elif [ "$RUNNER_OS" == "macOS" ]; then
-          /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
           if [ -z "${{ inputs.version }}" ]; then
             brew install credstash
           else
